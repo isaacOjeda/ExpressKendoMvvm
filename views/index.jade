@@ -8,28 +8,31 @@ block content
       <td data-bind='text: name'></td>
       <td data-bind='text: quantity'></td>
       <td> #: kendo.toString(get('price'),'C') #</td>
-      <td><button data-bind='click: removeProduct'>Delete</button></td>      
+      <td><button class='btn btn-sm btn-danger' data-bind='click: removeProduct'>Delete</button></td>      
     </tr>
   script#footerTemplate(type='text/template').
     <tr>
-      <td>Products count: #: total() #</td>
-      <td>Total price: #: totalPrice() #</td>
-      <td colspan="2">Units in stock: #: totalUnits() #</td>
+      <th>Products count: #: total() #</td>
+      <th>Total price: #: kendo.toString(totalPrice(),'C') #</td>
+      <th colspan="2">Units in stock: #: totalUnits() #</td>
     </tr>
-  .myView
-    ul
-      li 
-        label Product 
-          input(type='text',data-bind='value: productName')
-      li 
-        label Quantity 
-          input(type='text',data-bind='value: productQuantity')
-      li 
-        label Price 
-          input(type='text',data-bind='value: productPrice')
-      li    
-        button(data-bind='click: addProduct') Add a new product
-    table
+  .myView.form-horizontal
+    .form-group
+      label.control-label.col-md-2 Product
+      .col-md-5
+        input(type='text',data-bind='value: productName').form-control
+    .form-group
+      label.control-label.col-md-2 Quantity
+      .col-md-5
+        input(type='text',data-bind='value: productName').form-control
+    .form-group
+      label.control-label.col-md-2 Price
+      .col-md-5
+        input(type='text',data-bind='value: productName').form-control 
+    .form-group
+      .col-md-5.col-md-offset-2
+        button(data-bind='click: addProduct').btn.btn-primary Add a new product               
+    table.table.table-striped
       thead
         tr
           th Product

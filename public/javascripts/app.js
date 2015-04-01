@@ -3,10 +3,17 @@ $(function(){
     productName:"",
     productQuantity:0,
     productPrice:0.0,
-    products: [ ],
+    products: new kendo.data.DataSource({
+      transport:{
+        read:{
+          url: "/products",
+          dataType: "json"
+        }
+      }
+    }),
     addProduct:function(e){
       var products = this.get("products");
-      products.push({
+      products.add({
         name: this.get("productName"),
         price: parseFloat(this.get("productPrice")),
         quantity: parseFloat(this.get("productQuantity"))
@@ -17,30 +24,28 @@ $(function(){
       // field of the event argument
       var product = e.data;
       var products = this.get("products");
-      var index = products.indexOf(product);
-      // remove the product by using the splice method
-      products.splice(index, 1);
+      products.remove(product);
     },
     total: function() {
-      return this.get("products").length;
+      return this.get("products").data().length;
     },
     totalPrice: function() {
       var sum = 0;
 
-      $.each(this.get("products"), function(index, product) {
+      $.each(this.get("products").data(), function(index, product) {
           sum += product.price;
-        });
+      });
 
-        return sum;
+      return sum;
     },
     totalUnits: function() {
       var sum = 0;
 
-      $.each(this.get("products"), function(index, product) {
+      $.each(this.get("products").data(), function(index, product) {
           sum += product.quantity;
       });
 
-        return sum;
+      return sum;
     }
   });
 
