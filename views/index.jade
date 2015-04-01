@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  script#rowTemplate(type='text/template').
+    <tr>
+      <td data-bind='text: name'></td>
+      <td data-bind='text: quantity'></td>
+      <td> #: kendo.toString(get('price'),'C') #</td>
+      <td><button data-bind='click: removeProduct'>Delete</button></td>      
+    </tr>
+  script#footerTemplate(type='text/template').
+    <tr>
+      <td>Products count: #: total() #</td>
+      <td>Total price: #: totalPrice() #</td>
+      <td colspan="2">Units in stock: #: totalUnits() #</td>
+    </tr>
+  .myView
+    ul
+      li 
+        label Product 
+          input(type='text',data-bind='value: productName')
+      li 
+        label Quantity 
+          input(type='text',data-bind='value: productQuantity')
+      li 
+        label Price 
+          input(type='text',data-bind='value: productPrice')
+      li    
+        button(data-bind='click: addProduct') Add a new product
+    table
+      thead
+        tr
+          th Product
+          th Quantity
+          th Price
+          th Delete
+      tbody(data-template='rowTemplate',data-bind='source: products')
+      tfoot(data-template='footerTemplate',data-bind='source: this')
