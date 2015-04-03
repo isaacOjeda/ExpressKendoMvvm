@@ -1,4 +1,5 @@
 $(function(){
+
   var viewModel = kendo.observable({
     productName:"",
     productQuantity:0,
@@ -7,7 +8,36 @@ $(function(){
       transport:{
         read:{
           url: "/products",
+          method:"get",
           dataType: "json"
+        },
+        create:{
+          url: "/products",
+          method:"post",
+          dataType:"json"
+        },
+        destroy:{
+          url:"/products",
+          method:"delete",
+          dataType:"json"
+        },
+        update:{
+          url:"/products",
+          method:"put",
+          dataType:"json"
+        }
+      },
+      schema:{
+        model:{
+          id:"productId",
+          fields:{
+            price:{
+              type:"number"
+            },
+            quantity:{
+              type:"number"
+            }
+          }
         }
       }
     }),
@@ -18,22 +48,22 @@ $(function(){
         price: parseFloat(this.get("productPrice")),
         quantity: parseFloat(this.get("productQuantity"))
       });
-    },
-    removeProduct:function(e){
-      // the current data item (product) is passed as the "data"
-      // field of the event argument
-      var product = e.data;
-      var products = this.get("products");
-      products.remove(product);
+
+      this.set("productName", "");
+      this.set("productPrice", 0);
+      this.set("productQuantity", 0);
+
+      products.sync();
     },
     total: function() {
       return this.get("products").data().length;
     },
     totalPrice: function() {
+
       var sum = 0;
 
       $.each(this.get("products").data(), function(index, product) {
-          sum += product.price;
+          sum += parseFloat(product.price);
       });
 
       return sum;
@@ -42,10 +72,15 @@ $(function(){
       var sum = 0;
 
       $.each(this.get("products").data(), function(index, product) {
-          sum += product.quantity;
+          sum += parseInt(product.quantity);
       });
 
       return sum;
+    },
+    onRemoveItem:function(ev){
+      if (!confirm("Are you sure?")) {
+        ev.preventDefault();
+      }
     }
   });
 

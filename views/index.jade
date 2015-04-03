@@ -5,10 +5,13 @@ block content
   p Welcome to #{title}
   script#rowTemplate(type='text/template').
     <tr>
-      <td data-bind='text: name'></td>
-      <td data-bind='text: quantity'></td>
+      <td> #:get('name')#</td>      
       <td> #: kendo.toString(get('price'),'C') #</td>
-      <td><button class='btn btn-sm btn-danger' data-bind='click: removeProduct'>Delete</button></td>      
+      <td> #:get('quantity')#</td>
+      <td>
+        <a class="btn btn-sm btn-primary k-edit-button" href="\\#">Edit</a>
+        <a class="btn btn-sm btn-danger k-delete-button" href="\\#">Delete</a>
+      </td>      
     </tr>
   script#footerTemplate(type='text/template').
     <tr>
@@ -16,28 +19,45 @@ block content
       <th>Total price: #: kendo.toString(totalPrice(),'C') #</td>
       <th colspan="2">Units in stock: #: totalUnits() #</td>
     </tr>
-  .myView.form-horizontal
-    .form-group
-      label.control-label.col-md-2 Product
-      .col-md-5
-        input(type='text',data-bind='value: productName').form-control
-    .form-group
-      label.control-label.col-md-2 Quantity
-      .col-md-5
-        input(type='text',data-bind='value: productName').form-control
-    .form-group
-      label.control-label.col-md-2 Price
-      .col-md-5
-        input(type='text',data-bind='value: productName').form-control 
-    .form-group
-      .col-md-5.col-md-offset-2
-        button(data-bind='click: addProduct').btn.btn-primary Add a new product               
-    table.table.table-striped
-      thead
-        tr
-          th Product
-          th Quantity
-          th Price
-          th Delete
-      tbody(data-template='rowTemplate',data-bind='source: products')
-      tfoot(data-template='footerTemplate',data-bind='source: this')
+  script#rowEditTemplate(type='text/template').
+    <tr>
+      <td><input type="text" name="name" data-bind="value: name" class="k-textbox"/></td>
+      <td>
+        <input type="text" data-bind="value:quantity" data-role="numerictextbox" data-type="number" name="quantity" min="1"/>
+      <td>
+        <input type="text" data-bind="value:price" data-role="numerictextbox" data-type="number" name="price" min="1"   />        
+      </td>
+      <td>
+        <a class="btn btn-sm btn-primary k-update-button" href="\\#">Update</a>
+        <a class="btn btn-sm btn-danger k-cancel-button" href="\\#">Cancel</a>
+      </td>
+    </tr>
+  .myView
+    .form-horizontal
+      .form-group
+        label.control-label.col-md-2 Product
+        .col-md-5
+          input(type='text',data-bind='value: productName').form-control
+      .form-group
+        label.control-label.col-md-2 Quantity
+        .col-md-5
+          input(data-bind='value: productQuantity', data-role="numerictextbox",data-format="#",data-min="0",style="width:100%")
+      .form-group
+        label.control-label.col-md-2 Price
+        .col-md-5
+          input(type='number',data-bind='value: productPrice', data-role="numerictextbox",data-format="c",data-min="0",style="width:100%") 
+      .form-group
+        .col-md-5.col-md-offset-2
+          button(data-bind='click: addProduct').btn.btn-primary Add a new product
+    .panel.panel-default      
+      .panel-heading
+        h2.panel-title Products
+      table.table.table-bordered.table-striped      
+        thead
+          tr
+            th Product
+            th Price
+            th Quantity
+            th 
+        tbody(data-role="listview",data-template='rowTemplate',data-edit-template="rowEditTemplate",data-bind='source: products,events:{remove:onRemoveItem}')
+        tfoot(data-template='footerTemplate',data-bind='source: this')
