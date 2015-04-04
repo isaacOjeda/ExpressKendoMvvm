@@ -12,7 +12,6 @@ router.get('/', function(req, res, next) {
 
 /* GET static list */
 router.get('/products', function(req, res){
-
   res.json(dummyProducts);
 });
 

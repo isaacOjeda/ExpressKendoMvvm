@@ -63,7 +63,7 @@ $(function(){
       var sum = 0;
 
       $.each(this.get("products").data(), function(index, product) {
-          sum += parseFloat(product.price);
+          sum += product.price;
       });
 
       return sum;
@@ -72,7 +72,7 @@ $(function(){
       var sum = 0;
 
       $.each(this.get("products").data(), function(index, product) {
-          sum += parseInt(product.quantity);
+          sum += product.quantity;
       });
 
       return sum;
